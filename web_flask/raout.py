@@ -32,14 +32,29 @@ def get_users():
    return jsonify([user.__dict__ for user in users])
 
 # Get User by ID
-@app.route('/users/<int:id>', methods=['GET'])
+@app.route('/users/<int:id>', methods=['GET']) ## Defines a route for retrieving a specific user by ID using HTTP GET requests.
 def get_user(id):
-   user = session.query(User).filter(User.id == id).first()
+   user = session.query(User).filter(User.id == id).first() ## Queries for a user with the given ID
    if user:
-      return jsonify(user.__dict__)
+      return jsonify(user.__dict__) #Returns the user’s details as a JSON response if the user is found.
+   else:
+      return jsonify({'message': 'User not found'}), 404 #Returns an error message and HTTP status code 404
+
+# Update User by ID
+@app.route('/users/<int:id>', methods=['PUT']) ## Defines a route for updating a specific user by ID using HTTP PUT requests.
+def update_user(id):
+   data = request.get_json() ## Extracts the updated data from the request body.
+   user = session.query(User).filter(User.id == id).first() ## Finds the user with the given ID.
+   if user:
+      user.username = data['username']
+      user.email = data['email']
+      user.address = data['address']
+      user.phone = data['phone']
+      user.password = data['password']
+      session.commit()
+      return jsonify({'message', 'User updated successfully'})
    else:
       return jsonify({'message': 'User not found'}), 404
-
 
 if __name__ == "__main__":
     """ Main Function """
