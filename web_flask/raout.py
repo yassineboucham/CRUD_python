@@ -29,7 +29,17 @@ def create_user():
 def get_users():
    users = session.query(User).all() ## Queries the database for all user records.
    ## Converts user objects to dictionaries and returns them as a JSON response.
-   return jsonify([users.__dict__ for user in users])
+   return jsonify([user.__dict__ for user in users])
+
+# Get User by ID
+@app.route('/users/<int:id>', methods=['GET'])
+def get_user(id):
+   user = session.query(User).filter(User.id == id).first()
+   if user:
+      return jsonify(user.__dict__)
+   else:
+      return jsonify({'message': 'User not found'}), 404
+
 
 if __name__ == "__main__":
     """ Main Function """
