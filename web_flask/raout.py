@@ -24,6 +24,13 @@ def create_user():
    session.commit() ## Commits the transaction to the database.
    return jsonify({'message': 'User created successfully'}, 201) ## Returns a JSON response with a success message
 
+# Get All Users
+@app.route('/users', methods=['GET']) ## Defines a route for retrieving all users using HTTP GET requests.
+def get_users():
+   users = session.query(User).all() ## Queries the database for all user records.
+   ## Converts user objects to dictionaries and returns them as a JSON response.
+   return jsonify([users.__dict__ for user in users])
+
 if __name__ == "__main__":
     """ Main Function """
     app.run(host='0.0.0.0', port=5000, debug=True)  # Enable debug mode
