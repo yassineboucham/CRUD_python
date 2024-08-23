@@ -1,11 +1,15 @@
-from flask import Flask, render_template, request, redirect
-from Oorem import User, session
+from flask import Flask, request, jsonify
+from Oorem import User, Base, engine, sessionmaker # Import your ORM setup
 
 app = Flask(__name__)
 
+# Configure SQLAlchemy session
+Session = sessionmaker(bind=engine)
+session = Session()
+
 # Initialize MySQL connection
 
-@app.route("/", strict_slashes=False)
+@app.route("/users", methods=['POST'])
 def home():
    return 'hllo'
 
