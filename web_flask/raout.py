@@ -56,6 +56,17 @@ def update_user(id):
    else:
       return jsonify({'message': 'User not found'}), 404
 
+# Delete User by ID
+@app.route('/user/<int:id>', methods = ['DELETE']) ## Defines a route for deleting a specific user by ID using HTTP DELETE requests.
+def delete_user(id):
+   user = session.query(User).filter(User.id == id).first() ## Finds the user with the given ID.
+   if user:
+      session.delete(user) ## Deletes the user from the session.
+      session.commit() ## Commits the transaction to the database.
+      return jsonify({'message': 'User deleted successfully'})
+   else:
+      return jsonify({'message': 'User not found'}), 404
+
 if __name__ == "__main__":
     """ Main Function """
     app.run(host='0.0.0.0', port=5000, debug=True)  # Enable debug mode
